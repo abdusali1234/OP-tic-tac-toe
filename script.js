@@ -1,6 +1,6 @@
 console.log('Tic tac toe!');
 
-function gameBoard() {
+const gameBoard= (function () {
 
     let board = Array(9).fill(null);
 
@@ -31,6 +31,10 @@ function gameBoard() {
     }
 
     return {getBoard, displayBoard, setCell, clearBoard}
+})();
+
+function createPlayer(name, marker){
+    return {name, marker};
 }
 
-gameBoard().displayBoard()
+gameBoard.displayBoard();
