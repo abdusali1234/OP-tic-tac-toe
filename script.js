@@ -4,8 +4,10 @@ const gameBoard= ( () => {
 
     let board = [];//Array(9).fill(null);
 
+    const markers = ["X", "O"];
+
     for (let i = 1; i <= 9; i++){
-        board.push(i);
+        board.push(markers[Math.floor(Math.random() * markers.length)]);
     }
 
     const getBoard = () => board;
@@ -95,7 +97,7 @@ const game = (function() {
         gameBoard.displayBoard();
 
         while (isGameOver === false){
-            console.log(`${currentPlayer.name}'s turn!`);
+            console.log(`${currentPlayer.name}'s turn!`); 
             gameBoard.setCell(currentPlayer.marker);
             gameBoard.displayBoard();
             if (checkForWin(gameBoard.getBoard(), currentPlayer.marker)) {
@@ -121,10 +123,44 @@ const game = (function() {
 
 })();
 
-game.startGame("Mij", "Bah");
-console.log(game.getPlayerOne());
-console.log(game.getPlayerTwo());
-console.log(game.getCurrentPlayer());
-game.playGame();
+const displayController = ( function () {
+    const gameGrid = document.getElementById("game-grid");
+
+    function renderBoard () {
+        gameGrid.innerHTML = "";
+        gameBoard.getBoard().forEach((cell, index) => {
+            const cellEl = document.createElement('div');
+            cellEl.classList.add('grid-cell');
+            cellEl.setAttribute("id", `cell-${index+1}`)
+            cellEl.innerHTML = `${cell}`;
+
+            gameGrid.appendChild(cellEl);
+        });
+
+    };
+
+    return {renderBoard}
+})();
+
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+    displayController.renderBoard();
+    game.startGame("Mij", "Bah");
+
+    const musicEl = document.getElementById("game-music");
+    const playMusic = () => {
+        musicEl.play();
+        document.removeEventListener('click', playMusic);
+    };
+    document.addEventListener('click', playMusic);
+
+})
+
+
+// console.log(game.getPlayerOne());
+// console.log(game.getPlayerTwo());
+// console.log(game.getCurrentPlayer());
+// game.playGame();
 //gameBoard.displayBoard();
-//console.log(gameBoard.getBoard());
+console.log(gameBoard.getBoard());

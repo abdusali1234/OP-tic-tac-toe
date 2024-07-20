@@ -1,0 +1,17 @@
+
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+    justify-content: center;
+    background-color: white;
+}
+
+.grid-cell {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+}
