@@ -109,10 +109,8 @@ const game = (function() {
                 displayController.tieMessage();
                 isGameOver = true;
                 return;
-            } else {
-                changeCurrentPlayer();
             }
-            
+            changeCurrentPlayer();
             displayController.renderBoard();
         };
 
@@ -142,11 +140,13 @@ const displayController = ( function () {
             if (cell === "X" || cell === "O"){
                 cellEl.innerHTML = `${cell}`;
             }
-            cellEl.addEventListener("click", () => {
-                game.playGame(index);
-            })
 
             gameGrid.appendChild(cellEl);
+            cellEl.addEventListener("click", () => {
+                game.playGame(index);
+            });
+
+            
         });
 
     };
@@ -165,6 +165,7 @@ const displayController = ( function () {
 
     function tieMessage() {
         displayMessage.innerHTML = "Its a tie!";
+        console.log("Tie");
     }
 
     
