@@ -2,13 +2,9 @@ console.log('Tic tac toe!');
 
 const gameBoard= ( () => {
 
-    let board = [];//Array(9).fill(null);
+    let board = Array(9).fill(null);
 
-    const markers = ["X", "O"];
 
-    for (let i = 1; i <= 9; i++){
-        board.push(markers[Math.floor(Math.random() * markers.length)]);
-    }
 
     const getBoard = () => board;
 
@@ -22,20 +18,13 @@ const gameBoard= ( () => {
             `)
     };
 
-    function setCell( marker){
-        validCell = false;
-        while (validCell === false){
-            let index = prompt("Enter a number between 0 and 8: ");
-            if (board[index] == null){
-                board[index] = marker;
-                validCell = true;
-                return true;
-            } else {
-                console.log("Cell is already taken, use another one!");
-            }
+    function setCell(index, marker){  
+        if (board[index] == null){
+            board[index] = marker;
+            validCell = true;
+            return true;
         }
-        
-        
+        return false;
     };
 
 
@@ -67,16 +56,23 @@ const game = (function() {
         [2,4,6]
     ];
 
+
+
     function startGame(playerOneName, playerTwoName) {
         playerOne = createPlayer(playerOneName, 'X');
         playerTwo = createPlayer(playerTwoName, 'O');
         currentPlayer = playerOne;
-        isGameOver = false;
         gameBoard.clearBoard();
+        displayController.renderBoard();
+        isGameOver = false;
+        
     };
+
+    
 
     function changeCurrentPlayer() {
         currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
+        displayController.playerTurnMessage();
     };
 
     const checkForWin = (board, marker) =>{
@@ -91,25 +87,33 @@ const game = (function() {
 
     
 
-    function playGame() {
-        if (isGameOver) console.log("Thank's for playing!");
-        console.log("Let's play!");
-        gameBoard.displayBoard();
+    function playGame(index) {
+        if (isGameOver) return;
 
-        while (isGameOver === false){
+        
+        
+        if (gameBoard.setCell(index, currentPlayer.marker)){
+            
             console.log(`${currentPlayer.name}'s turn!`); 
             gameBoard.setCell(currentPlayer.marker);
             gameBoard.displayBoard();
             if (checkForWin(gameBoard.getBoard(), currentPlayer.marker)) {
-                console.log(`${currentPlayer.name} wins!`);
-                isGameOver = true;
+                displayController.winnerMessage();
+                setTimeout( () => {
+                    isGameOver = true;
+                    return;
+                }, 1000);                
             };
 
             if (checkForTie(gameBoard.getBoard())) {
-                console.log("It's a tie!");
+                displayController.tieMessage();
                 isGameOver = true;
-            };
-            changeCurrentPlayer();
+                return;
+            } else {
+                changeCurrentPlayer();
+            }
+            
+            displayController.renderBoard();
         };
 
     };
@@ -125,6 +129,7 @@ const game = (function() {
 
 const displayController = ( function () {
     const gameGrid = document.getElementById("game-grid");
+    const displayMessage = document.getElementById("display-message");
 
     function renderBoard () {
         gameGrid.innerHTML = "";
@@ -132,35 +137,51 @@ const displayController = ( function () {
             const cellEl = document.createElement('div');
             cellEl.classList.add('grid-cell');
             cellEl.setAttribute("id", `cell-${index+1}`)
-            cellEl.innerHTML = `${cell}`;
+            cellEl.innerHTML = '';
+
+            if (cell === "X" || cell === "O"){
+                cellEl.innerHTML = `${cell}`;
+            }
+            cellEl.addEventListener("click", () => {
+                game.playGame(index);
+            })
 
             gameGrid.appendChild(cellEl);
         });
 
     };
 
-    return {renderBoard}
+
+    function playerTurnMessage () {
+        currentPlayer = game.getCurrentPlayer();
+        displayMessage.innerHTML = `${currentPlayer.name}'s turn!`;
+    }
+
+    function winnerMessage() {
+        currentPlayer = game.getCurrentPlayer();
+        displayMessage.innerHTML = `${currentPlayer.name} wins!`;
+        console.log(`${currentPlayer.name} wins!`);
+    }
+
+    function tieMessage() {
+        displayMessage.innerHTML = "Its a tie!";
+    }
+
+    
+
+    return {renderBoard, playerTurnMessage, winnerMessage, tieMessage}
 })();
 
 
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    displayController.renderBoard();
-    game.startGame("Mij", "Bah");
+    game.startGame("Player 1", "Player 2");
 
-    const musicEl = document.getElementById("game-music");
-    const playMusic = () => {
-        musicEl.play();
-        document.removeEventListener('click', playMusic);
-    };
-    document.addEventListener('click', playMusic);
+    // const musicEl = document.getElementById("game-music");
+    // const playMusic = () => {
+    //     musicEl.play();
+    //     document.removeEventListener('click', playMusic);
+    // };
+    // document.addEventListener('click', playMusic);
 
-})
-
-
-// console.log(game.getPlayerOne());
-// console.log(game.getPlayerTwo());
-// console.log(game.getCurrentPlayer());
-// game.playGame();
-//gameBoard.displayBoard();
-console.log(gameBoard.getBoard());
+});
