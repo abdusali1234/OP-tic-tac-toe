@@ -1,3 +1,28 @@
+:root {
+    --black: #1b1233;
+    --green: #dcf29d;
+}
+@font-face {
+    font-family: 'vt323regular';
+    src: url('assets/fonts/vt323-regular-webfont.woff2') format('woff2'),
+         url('assets/fonts/vt323-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: '04b30';
+    src: url('assets/fonts/04b_30__-webfont.woff2') format('woff2'),
+         url('assets/fonts/04b_30__-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
     padding: 0;
     margin: 0;
@@ -5,21 +30,64 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+    font-family: 'vt323regular';
+    background-color: var(--black);
+    color: var(--green);
+}
+
+h1 {
+    font-size: 48px;
+    font-family: '04b30';
 }
 
 #gameboard {
     display: grid;
-    grid-template-columns: repeat(3, 200px);
-    grid-template-rows: repeat(3, 200px);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     justify-content: center;
-    background-color: white;
+    
     margin: 1vw;
+    height: 60vh;
+    width: 60vh;
 }
 
 .cell {
-    border: 1px solid black;
+    border: 1px solid var(--green);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 80px;
+}
+
+#controls {
+    margin: 1vw;
+}
+
+#message {
+    font-size: 36px;
+}
+
+input {
+    font-family: 'vt323regular';
+    font-size: 18px;
+    background-color: var(--black);
+    color: var(--green);
+    border-color: var(--green);
+}
+
+button {
+    font-family: 'vt323regular';
+    font-size: 18px;
+    background-color: var(--black);
+    color: var(--green);
+    border-color: var(--green);
+
+}
+
+button:hover {
+    background-color: var(--green);
+    color: var(--black);
+    border-color: var(--green);
+
 }
